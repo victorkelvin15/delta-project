@@ -40,7 +40,6 @@
         }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
 
-        /* header */
         .header {
             background: var(--primary);
             padding: 12px 0;
@@ -60,11 +59,10 @@
         .logo span { color: var(--secondary); }
         .logo small { font-size: 11px; font-weight: 400; opacity: 0.7; display: block; }
         .nav { display: flex; gap: 6px; flex-wrap: wrap; }
-        .nav a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 50px; transition: var(--transition); }
+        .nav a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 50px; transition: var(--transition); cursor: pointer; }
         .nav a:hover, .nav a.active { background: rgba(255,255,255,0.1); color: #fff; }
         .nav a.active { background: var(--secondary); color: var(--primary); }
 
-        /* hero search */
         .hero {
             background: linear-gradient(135deg, #1a3a5c 0%, #2a5a8c 100%);
             padding: 40px 0 50px;
@@ -104,18 +102,11 @@
             font-family: inherit;
         }
         .search-box button:hover { background: #d4952e; }
-        .hero-actions { margin-top: 14px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-        .hero-actions .btn {
-            padding: 8px 22px; border-radius: 50px; border: none; font-weight: 600; font-size: 13px; cursor: pointer; transition: var(--transition); font-family: inherit;
-        }
-        .btn-secondary { background: rgba(255,255,255,0.15); color: #fff; }
-        .btn-secondary:hover { background: rgba(255,255,255,0.25); }
 
-        /* featured */
         .section-title { font-size: 22px; font-weight: 700; margin: 28px 0 14px; color: var(--gray-900); display: flex; align-items: center; gap: 8px; }
-        .featured-grid {
+        .property-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
@@ -129,18 +120,26 @@
         }
         .property-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--secondary); }
         .property-card .img {
-            height: 180px;
-            background: var(--gray-300);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            color: var(--gray-400);
+            height: 200px;
+            background-size: cover;
+            background-position: center;
             position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+            padding: 10px;
         }
         .property-card .img .badge {
             position: absolute; top: 10px; left: 10px;
-            background: var(--success); color: #fff; font-size: 9px; font-weight: 700; padding: 2px 10px; border-radius: 50px;
+            background: var(--success); color: #fff; font-size: 9px; font-weight: 700; padding: 3px 12px; border-radius: 50px;
+        }
+        .property-card .img .price-tag {
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            padding: 4px 14px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 700;
         }
         .property-card .body { padding: 14px 16px; }
         .property-card .body h4 { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
@@ -151,7 +150,6 @@
             padding: 10px 16px; border-top: 1px solid var(--gray-200);
             display: flex; justify-content: space-between; align-items: center;
         }
-        .property-card .footer .price { font-weight: 700; color: var(--primary); }
         .property-card .footer .reviews { font-size: 12px; color: var(--gray-500); }
 
         .btn-outline-sm {
@@ -160,7 +158,6 @@
         }
         .btn-outline-sm:hover { border-color: var(--primary); color: var(--primary); }
 
-        /* filters */
         .filter-bar {
             background: #fff;
             padding: 14px 18px;
@@ -183,7 +180,6 @@
         }
         .filter-bar select:focus, .filter-bar input:focus { border-color: var(--secondary); }
 
-        /* property detail modal */
         .modal-overlay {
             position: fixed; inset: 0;
             background: rgba(0,0,0,0.5);
@@ -213,17 +209,9 @@
         }
         .modal-close:hover { color: var(--gray-700); }
         .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .detail-gallery { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
-        .detail-gallery .thumb { height: 80px; background: var(--gray-200); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--gray-400); cursor: pointer; transition: var(--transition); }
-        .detail-gallery .thumb:hover { opacity: 0.8; }
         .detail-info .row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--gray-100); font-size: 13px; }
         .detail-info .row .label { color: var(--gray-500); }
         .detail-info .row .value { font-weight: 500; }
-
-        .review-item { border-bottom: 1px solid var(--gray-100); padding: 12px 0; }
-        .review-item .stars { color: var(--warning); }
-        .review-item .photo-review { display: flex; gap: 8px; margin-top: 6px; }
-        .review-item .photo-review .thumb { width: 60px; height: 60px; background: var(--gray-200); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--gray-400); }
 
         .map-container { height: 220px; border-radius: var(--radius-sm); margin: 10px 0; background: var(--gray-200); }
 
@@ -241,6 +229,9 @@
         .toast.show { transform: translateY(0); opacity: 1; }
         .toast.success { background: var(--success); }
 
+        .verified-badge { background: var(--success); color: #fff; font-size: 9px; padding: 2px 10px; border-radius: 50px; font-weight: 600; }
+        .badge-published { background: #7c3aed; color: #fff; font-size: 9px; padding: 2px 10px; border-radius: 50px; font-weight: 600; }
+
         @media (max-width: 700px) {
             .detail-grid { grid-template-columns: 1fr; }
             .hero h1 { font-size: 24px; }
@@ -248,24 +239,18 @@
             .search-box input { padding: 12px 16px; }
             .search-box button { padding: 12px; border-radius: 0; }
             .modal-box { padding: 16px; }
-            .detail-gallery { grid-template-columns: repeat(3,1fr); }
             .filter-bar { flex-direction: column; align-items: stretch; }
         }
         @media (max-width: 480px) {
-            .featured-grid { grid-template-columns: 1fr; }
+            .property-grid { grid-template-columns: 1fr; }
             .header-inner { flex-direction: column; align-items: flex-start; }
         }
-        .verified-badge { background: var(--success); color: #fff; font-size: 9px; padding: 2px 10px; border-radius: 50px; font-weight: 600; }
-        .verified-badge i { margin-right: 4px; }
-        .badge-published { background: #7c3aed; color: #fff; font-size: 9px; padding: 2px 10px; border-radius: 50px; font-weight: 600; }
     </style>
 </head>
 <body>
 
-<!-- TOAST -->
 <div id="toast" class="toast"></div>
 
-<!-- HEADER -->
 <header class="header">
     <div class="container header-inner">
         <div class="logo">
@@ -280,7 +265,6 @@
     </div>
 </header>
 
-<!-- HERO -->
 <section class="hero" id="heroSection">
     <div class="container">
         <h1>Find Verified Properties Across Delta State</h1>
@@ -289,22 +273,16 @@
             <input type="text" id="globalSearch" placeholder="Search properties..." oninput="performSearch()" />
             <button onclick="performSearch()"><i class="fas fa-search"></i> Search Properties</button>
         </div>
-        <div class="hero-actions">
-            <button class="btn btn-secondary" onclick="switchView('explore')"><i class="fas fa-list"></i> Explore Map</button>
-        </div>
     </div>
 </section>
 
-<!-- MAIN CONTENT -->
 <div class="container" id="mainContent">
 
-    <!-- FEATURED / HOME -->
     <div id="viewHome">
         <div class="section-title"><i class="fas fa-star" style="color:var(--secondary);"></i> Featured Verified Properties</div>
-        <div class="featured-grid" id="featuredGrid"></div>
+        <div class="property-grid" id="featuredGrid"></div>
     </div>
 
-    <!-- EXPLORE (with filters) -->
     <div id="viewExplore" style="display:none;">
         <div class="section-title"><i class="fas fa-th-large"></i> Explore Properties</div>
         <div class="filter-bar" id="filterBar">
@@ -314,22 +292,19 @@
             <select id="filterBedrooms" onchange="filterProperties()"><option value="">Beds</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option></select>
             <select id="filterSort" onchange="filterProperties()"><option value="rating">Highest Rated</option><option value="reviews">Most Reviewed</option></select>
         </div>
-        <div class="featured-grid" id="exploreGrid"></div>
+        <div class="property-grid" id="exploreGrid"></div>
     </div>
 
-    <!-- MAP VIEW -->
     <div id="viewMap" style="display:none;">
-        <div class="section-title"><i class="fas fa-map-pin"></i> Map Property Discovery <span style="font-size:13px;font-weight:400;color:var(--gray-500);">(click a marker to preview)</span></div>
+        <div class="section-title"><i class="fas fa-map-pin"></i> Map Property Discovery</div>
         <div id="mapContainer" style="height:500px;border-radius:var(--radius);background:var(--gray-200);"></div>
         <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">
             <button class="btn-outline-sm" onclick="switchView('explore')"><i class="fas fa-list"></i> List View</button>
-            <button class="btn-outline-sm" onclick="switchView('mapview')" style="border-color:var(--secondary);"><i class="fas fa-map"></i> Map View</button>
         </div>
     </div>
 
 </div>
 
-<!-- PROPERTY DETAIL MODAL -->
 <div class="modal-overlay" id="detailModal">
     <div class="modal-box">
         <button class="modal-close" onclick="closeModal()">&times;</button>
@@ -337,21 +312,45 @@
     </div>
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
     // ========================================
-    // DUMMY PROPERTY DATABASE (300+ realistic)
+    // PROPERTY DATA WITH IMAGES
     // ========================================
     const locations = ['Asaba','Warri','Effurun','Ughelli','Sapele','Agbor','Abraka','Oleh','Ozoro','Kwale','Uvwie','Udu','Bomadi','Burutu','Okpanam','GRA','DBS Road','Summit','Nnebisi Road','Cable Point','Anwai','Ibusa Road','Enerhen','Ugbor','Ekpan','Jakpa Road','PTI Road'];
     const types = ['House','Duplex','Bungalow','Apartment','Commercial','Land'];
-    const firstNames = ['Chidi','Adebayo','Ngozi','Musa','Fatima','Emeka','Olu','Amina','Segun','Chioma','Tunde','Zainab','Kofi','Efe','Ovie','Ejiro','Oghene','Efe','Dennis','Precious'];
+    const firstNames = ['Chidi','Adebayo','Ngozi','Musa','Fatima','Emeka','Olu','Amina','Segun','Chioma','Tunde','Zainab','Kofi','Efe','Ovie','Ejiro','Oghene','Dennis','Precious'];
     const lastNames = ['Okonkwo','Williams','Eze','Bello','Abubakar','Okafor','Balogun','Mohammed','Ogunlade','Nwachukwu','Oyedeji','Abdullahi','Mensah','Akpoborie','Uduaghan','Omar','Ebirim','Odili','Okoro','Idris'];
     const streets = ['Oba Road','Market Road','Okpanam Road','Ibusa Road','Nnebisi Road','DBS Road','Summit Road','Cable Point','Jakpa Road','PTI Road','Enerhen Road','Ugbor Road','Ekpan Road','Udu Road','Warri/Sapele Road'];
+
+    // Beautiful property images from Unsplash
+    const propertyImages = [
+        'https://images.unsplash.com/photo-1564013799919-ab600027d660?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1576941089067-2de3c901e126?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1448630360428-65456885c650?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=300&fit=crop',
+    ];
+
+    const descriptions = [
+        'Beautiful property in a quiet neighborhood with 24/7 security and steady electricity. Well-maintained with modern finishes.',
+        'Spacious home with large compound, ample parking, and excellent road access. Perfect for families.',
+        'Prime location property close to schools, markets, and major roads. High investment potential.',
+        'Luxurious living space with all modern amenities, beautiful views, and reliable utilities.',
+        'Affordable property in a developing area. Good for first-time buyers or investors.',
+        'Well-maintained property with reliable water supply, security, and beautiful surroundings.',
+        'Modern building with state-of-the-art facilities, spacious rooms, and beautiful landscaping.',
+        'Perfect for families with children. Close to schools, hospitals, and shopping centers.'
+    ];
 
     function randomItem(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
     function randomInt(min,max) { return Math.floor(Math.random() * (max-min+1)) + min; }
     function randomFloat(min,max) { return +(min + Math.random() * (max-min)).toFixed(1); }
 
-    function generateProperties(count = 320) {
+    function generateProperties(count = 30) {
         const props = [];
         for (let i = 1; i <= count; i++) {
             const lga = randomItem(['Oshimili','Warri South','Uvwie','Ughelli North','Sapele','Ika North','Ethiope East','Isoko South','Ndokwa East','Burutu','Bomadi']);
@@ -363,30 +362,31 @@
             const rating = randomFloat(3.0, 4.8);
             const reviews = randomInt(5, 80);
             const price = randomInt(150000, 2500000);
-            const lat = 5.3 + Math.random() * 1.2;
-            const lng = 5.8 + Math.random() * 1.2;
+            const lat = (5.0 + Math.random() * 1.5).toFixed(6);
+            const lng = (5.4 + Math.random() * 1.5).toFixed(6);
             const id = `DP-2026-${String(100000 + i).padStart(6, '0')}`;
             const owner = `${randomItem(firstNames)} ${randomItem(lastNames)}`;
+            const imageIndex = i % propertyImages.length;
+            
             props.push({
                 id, owner, type, lga, city, street,
                 bedrooms: beds, bathrooms: baths,
                 rating, reviews, price,
-                lat, lng,
+                lat: parseFloat(lat), lng: parseFloat(lng),
                 title: `${beds > 0 ? beds + '-Bedroom' : ''} ${type} ${beds > 0 ? randomItem(['Detached','Semi-Detached','Luxury','Standard']) : ''}`.trim() || 'Land Parcel',
-                address: `${randomInt(1,99)} ${street}, ${city}, Delta`,
+                address: `${randomInt(1,99)} ${street}, ${city}`,
                 verified: Math.random() > 0.15,
                 published: Math.random() > 0.2,
-                images: randomInt(2, 8),
-                description: `This ${type.toLowerCase()} is located in a prime area of ${city}. It features ${beds > 0 ? beds + ' bedrooms and ' + baths + ' bathrooms.' : 'open land ready for development.'} The property is well-maintained and offers easy access to roads and amenities.`,
+                image: propertyImages[imageIndex],
+                description: randomItem(descriptions),
                 landmark: randomItem(['Near Market','Close to School','By Main Road','Opposite Church','Behind Stadium']),
                 agent: Math.random() > 0.5 ? `${randomItem(['ABC Properties','Delta Homes','Royal Estate','Prime Land','City Realtors'])} Ltd.` : null,
-                agentId: Math.random() > 0.5 ? `AG-${String(randomInt(100,999))}` : null,
                 phone: `080${String(randomInt(10000000, 99999999))}`,
                 showPhone: Math.random() > 0.4,
                 reviewsList: []
             });
         }
-        // Add some review data
+        // Add reviews
         props.forEach(p => {
             const count = randomInt(1, 8);
             for (let i=0; i<count; i++) {
@@ -399,13 +399,11 @@
                         'Great location, close to the market. Highly recommended!',
                         'Needs some maintenance but generally okay.',
                         'Beautiful property, exactly as described.',
-                        'The road is terrible during rainy season, otherwise okay.',
                         'Landlord is responsive and helpful.',
                         'Security is good, but electricity can be unstable.'
                     ]),
                     date: `2026-${String(randomInt(1,8)).padStart(2,'0')}-${String(randomInt(1,28)).padStart(2,'0')}`,
-                    isVerifiedTenant: Math.random() > 0.3,
-                    hasPhoto: Math.random() > 0.6
+                    isVerifiedTenant: Math.random() > 0.3
                 });
             }
             p.avgRating = p.reviewsList.length ? (p.reviewsList.reduce((a,b) => a+b.rating,0) / p.reviewsList.length).toFixed(1) : p.rating;
@@ -414,26 +412,21 @@
         return props;
     }
 
-    let properties = generateProperties(320);
+    let properties = generateProperties(30);
     let currentView = 'home';
     let mapInstance = null;
 
     // ========================================
     // RENDER FUNCTIONS
     // ========================================
-    function renderFeatured() {
-        const featured = properties.filter(p => p.verified && p.published).slice(0, 8);
-        const grid = document.getElementById('featuredGrid');
-        grid.innerHTML = featured.map(p => cardHTML(p)).join('');
-    }
-
     function cardHTML(p) {
         const star = p.avgRating || p.rating || 0;
+        const priceDisplay = p.price >= 1000000 ? `₦${(p.price/1000000).toFixed(1)}M` : `₦${(p.price/1000).toFixed(0)}K`;
         return `
             <div class="property-card">
-                <div class="img" style="background:linear-gradient(135deg, var(--primary), var(--primary-light));color:#fff;font-size:14px;">
-                    🏠 ${p.title}
+                <div class="img" style="background-image: url('${p.image}');">
                     <span class="badge"><i class="fas fa-check-circle"></i> ${p.published ? 'PUBLISHED' : 'VERIFIED'}</span>
+                    <span class="price-tag">${priceDisplay}</span>
                 </div>
                 <div class="body">
                     <h4>${p.title}</h4>
@@ -445,18 +438,26 @@
                     </div>
                 </div>
                 <div class="footer">
-                    <span class="price">₦${(p.price/1000).toFixed(0)}K</span>
                     <span class="reviews">⭐ ${star} (${p.reviewCount} reviews)</span>
-                    <button class="btn-outline-sm" onclick="openDetail('${p.id}')">View</button>
+                    <div style="display:flex;gap:4px;">
+                        <button class="btn-outline-sm" onclick="openDetail('${p.id}')">View</button>
+                        <button class="btn-outline-sm" onclick="window.open('https://www.google.com/maps?q=${p.lat},${p.lng}','_blank')" title="View on Google Maps">
+                            <i class="fas fa-map-pin"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         `;
     }
 
+    function renderFeatured() {
+        const featured = properties.filter(p => p.verified && p.published).slice(0, 8);
+        document.getElementById('featuredGrid').innerHTML = featured.map(cardHTML).join('');
+    }
+
     function renderExplore(filtered = null) {
         const data = filtered || properties.filter(p => p.verified && p.published);
-        const grid = document.getElementById('exploreGrid');
-        grid.innerHTML = data.map(p => cardHTML(p)).join('');
+        document.getElementById('exploreGrid').innerHTML = data.map(cardHTML).join('');
     }
 
     function populateFilterOptions() {
@@ -502,9 +503,6 @@
         updateMapMarkers(filtered);
     }
 
-    // ========================================
-    // SEARCH (global)
-    // ========================================
     function performSearch() {
         const q = document.getElementById('globalSearch').value.toLowerCase();
         if (!q) { switchView('home'); return; }
@@ -513,9 +511,6 @@
         filterProperties();
     }
 
-    // ========================================
-    // VIEW SWITCH
-    // ========================================
     function switchView(view) {
         currentView = view;
         document.getElementById('viewHome').style.display = view === 'home' ? 'block' : 'none';
@@ -532,7 +527,7 @@
     }
 
     // ========================================
-    // MAP
+    // MAP (Leaflet)
     // ========================================
     function initMap() {
         if (mapInstance) { mapInstance.invalidateSize(); return; }
@@ -545,7 +540,6 @@
 
     function updateMapMarkers(props) {
         if (!mapInstance) return;
-        // clear old markers
         mapInstance.eachLayer(layer => {
             if (layer instanceof L.Marker) mapInstance.removeLayer(layer);
         });
@@ -554,16 +548,15 @@
             const marker = L.marker([p.lat, p.lng]).addTo(mapInstance);
             marker.bindPopup(`
                 <div style="font-weight:600;">${p.title}</div>
-                <div style="font-size:12px;color:var(--gray-500);">${p.address}</div>
+                <div style="font-size:12px;color:#64748b;">${p.address}</div>
                 <div style="font-size:11px;">⭐ ${(p.avgRating || p.rating)} (${p.reviewCount})</div>
-                <div><span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span></div>
                 <button class="btn-outline-sm" onclick="openDetail('${p.id}')" style="margin-top:4px;">View Property</button>
             `);
         });
     }
 
     // ========================================
-    // DETAIL MODAL
+    // DETAIL MODAL WITH GOOGLE MAPS
     // ========================================
     function openDetail(id) {
         const p = properties.find(x => x.id === id);
@@ -573,10 +566,15 @@
         const starFull = '⭐'.repeat(Math.floor(avg));
         const starHalf = avg % 1 >= 0.5 ? '☆' : '';
 
+        // Google Maps URLs
+        const googleMapsUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${p.lat},${p.lng}`;
+        const googleMapsDirections = `https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}`;
+        const googleMapsFull = `https://www.google.com/maps?q=${p.lat},${p.lng}`;
+
         document.getElementById('detailContent').innerHTML = `
             <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;">
                 <h2 style="font-size:22px;">${p.title}</h2>
-                <span><span class="verified-badge"><i class="fas fa-check-circle"></i> VERIFIED BY DELTA PROPERTIES</span>
+                <span><span class="verified-badge"><i class="fas fa-check-circle"></i> VERIFIED</span>
                 ${p.published ? '<span class="badge-published"><i class="fas fa-globe"></i> PUBLISHED</span>' : ''}</span>
             </div>
             <div style="font-size:14px;color:var(--gray-500);margin-bottom:6px;"><i class="fas fa-map-pin"></i> ${p.address}</div>
@@ -584,21 +582,27 @@
 
             <div class="detail-grid">
                 <div>
-                    <div class="detail-gallery">
-                        ${Array.from({length: Math.min(p.images, 6)}, (_,i) => `
-                            <div class="thumb" onclick="showToast('Image ${i+1} fullscreen (demo)','success')">
-                                <i class="fas fa-image"></i>
-                            </div>
-                        `).join('')}
-                        ${p.images > 6 ? `<div class="thumb"><i class="fas fa-ellipsis-h"></i></div>` : ''}
+                    <!-- Property Image -->
+                    <img src="${p.image}" alt="${p.title}" style="width:100%;height:200px;object-fit:cover;border-radius:8px;margin-bottom:10px;" />
+                    
+                    <!-- Google Maps Embed -->
+                    <div style="position:relative;padding-bottom:56.25%;height:0;border-radius:8px;overflow:hidden;">
+                        <iframe 
+                            src="${googleMapsUrl}" 
+                            style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"
+                            allowfullscreen 
+                            loading="lazy">
+                        </iframe>
                     </div>
-                    <div style="margin-top:8px;font-size:12px;color:var(--gray-400);">Click any image to view full screen</div>
-
-                    <div class="map-container" id="detailMap"></div>
-                    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">
-                        <button class="btn-outline-sm" onclick="showToast('Opening Google Maps (demo)','success')"><i class="fas fa-map"></i> View on Map</button>
-                        <button class="btn-outline-sm" onclick="showToast('Directions (demo)','success')"><i class="fas fa-directions"></i> Get Directions</button>
-                        <button class="btn-outline-sm" onclick="showToast('Google Maps (demo)','success')"><i class="fas fa-external-link-alt"></i> Open in Google Maps</button>
+                    
+                    <!-- Map Buttons -->
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">
+                        <button class="btn-outline-sm" onclick="window.open('${googleMapsFull}','_blank')">
+                            <i class="fas fa-map"></i> Open in Google Maps
+                        </button>
+                        <button class="btn-outline-sm" onclick="window.open('${googleMapsDirections}','_blank')">
+                            <i class="fas fa-directions"></i> Get Directions
+                        </button>
                     </div>
                 </div>
                 <div>
@@ -614,16 +618,21 @@
                     </div>
 
                     <div style="margin-top:12px;padding:12px;background:var(--gray-50);border-radius:var(--radius-sm);border:1px solid var(--gray-200);">
+                        <div style="font-weight:600;font-size:13px;">📍 Property Description</div>
+                        <p style="font-size:13px;color:var(--gray-600);margin-top:4px;">${p.description}</p>
+                    </div>
+
+                    <div style="margin-top:12px;padding:12px;background:var(--gray-50);border-radius:var(--radius-sm);border:1px solid var(--gray-200);">
                         <div style="font-weight:600;">Property Contact</div>
                         <div style="font-size:13px;margin:4px 0;"><strong>Landlord:</strong> ${p.owner}</div>
-                        ${p.agent ? `<div style="font-size:13px;"><strong>Agent:</strong> ${p.agent} ${p.agentId ? '('+p.agentId+')' : ''}</div>` : ''}
+                        ${p.agent ? `<div style="font-size:13px;"><strong>Agent:</strong> ${p.agent}</div>` : ''}
                         <div style="font-size:13px;margin:4px 0;">
                             ${p.showPhone ? `<i class="fas fa-phone"></i> ${p.phone}` : '<span style="color:var(--gray-400);">Contact info hidden by owner</span>'}
                         </div>
                         <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;">
-                            <button class="btn-outline-sm" onclick="showToast('Call ${p.phone || 'hidden'}','success')"><i class="fas fa-phone"></i> Call</button>
-                            <button class="btn-outline-sm" onclick="showToast('WhatsApp ${p.phone || 'hidden'}','success')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
-                            <button class="btn-outline-sm" onclick="showToast('Message sent (demo)','success')"><i class="fas fa-envelope"></i> Message</button>
+                            <button class="btn-outline-sm" onclick="showToast('Calling ${p.owner}...','success')"><i class="fas fa-phone"></i> Call</button>
+                            <button class="btn-outline-sm" onclick="showToast('WhatsApp ${p.owner}...','success')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+                            <button class="btn-outline-sm" onclick="showToast('Email sent to ${p.owner}','success')"><i class="fas fa-envelope"></i> Email</button>
                         </div>
                     </div>
                 </div>
@@ -636,63 +645,27 @@
                     <span style="font-size:20px;">${starFull}${starHalf}</span>
                     <span style="color:var(--gray-500);">${p.reviewCount} Reviews</span>
                 </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 20px;font-size:12px;margin-bottom:8px;">
-                    <div><span class="label">Landlord</span> ${'⭐'.repeat(Math.min(5, Math.floor(avg)))}</div>
-                    <div><span class="label">Security</span> ${'⭐'.repeat(Math.min(5, Math.floor(avg-0.3)))}</div>
-                    <div><span class="label">Water</span> ${'⭐'.repeat(Math.min(5, Math.floor(avg-0.5)))}</div>
-                    <div><span class="label">Electricity</span> ${'⭐'.repeat(Math.min(5, Math.floor(avg-0.2)))}</div>
-                    <div><span class="label">Road</span> ${'⭐'.repeat(Math.min(5, Math.floor(avg-0.4)))}</div>
-                    <div><span class="label">Environment</span> ${'⭐'.repeat(Math.min(5, Math.floor(avg-0.1)))}</div>
-                    <div><span class="label">Maintenance</span> ${'⭐'.repeat(Math.min(5, Math.floor(avg-0.6)))}</div>
-                </div>
-                ${reviews.slice(0, 5).map(r => `
-                    <div class="review-item">
+                ${reviews.slice(0, 4).map(r => `
+                    <div class="review-item" style="border-bottom:1px solid var(--gray-100);padding:10px 0;">
                         <div style="display:flex;justify-content:space-between;">
-                            <span><strong>${r.user}</strong> ${'⭐'.repeat(Math.floor(r.rating))}${r.rating % 1 >= 0.5 ? '☆' : ''}</span>
+                            <span><strong>${r.user}</strong> ${'⭐'.repeat(Math.floor(r.rating))}</span>
                             <span style="font-size:10px;color:var(--gray-400);">${r.date}</span>
                         </div>
                         <div style="font-size:13px;margin:3px 0;">${r.text}</div>
                         ${r.isVerifiedTenant ? '<span class="verified-badge" style="font-size:8px;"><i class="fas fa-check"></i> Verified Tenant</span>' : ''}
-                        ${r.hasPhoto ? `
-                            <div class="photo-review">
-                                <div class="thumb"><i class="fas fa-image"></i></div>
-                                <div class="thumb"><i class="fas fa-image"></i></div>
-                                <span style="font-size:10px;color:var(--gray-400);">Tenant Photo</span>
-                            </div>
-                        ` : ''}
                     </div>
                 `).join('')}
-                ${reviews.length > 5 ? `<div style="padding:6px 0;font-size:12px;color:var(--gray-400);">+ ${reviews.length - 5} more reviews</div>` : ''}
-            </div>
-
-            <div style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap;">
-                <button class="btn-outline-sm" onclick="showToast('Comment feature (demo)','success')"><i class="fas fa-comment"></i> Add Comment</button>
-                <button class="btn-outline-sm" onclick="showToast('Ask a question (demo)','success')"><i class="fas fa-question-circle"></i> Ask a Question</button>
+                ${reviews.length > 4 ? `<div style="padding:6px 0;font-size:12px;color:var(--gray-400);">+ ${reviews.length - 4} more reviews</div>` : ''}
             </div>
         `;
 
         document.getElementById('detailModal').classList.add('show');
-
-        // mini map
-        setTimeout(() => {
-            const mapDiv = document.getElementById('detailMap');
-            if (mapDiv) {
-                const m = L.map(mapDiv).setView([p.lat, p.lng], 15);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; OpenStreetMap'
-                }).addTo(m);
-                L.marker([p.lat, p.lng]).addTo(m).bindPopup(p.title);
-            }
-        }, 300);
     }
 
     function closeModal() {
         document.getElementById('detailModal').classList.remove('show');
     }
 
-    // ========================================
-    // TOAST
-    // ========================================
     function showToast(msg, type='info') {
         const t = document.getElementById('toast');
         t.textContent = msg;
@@ -708,7 +681,7 @@
     renderFeatured();
     populateFilterOptions();
     showToast('Welcome to Delta Properties Public Directory', 'success');
-    console.log('Module 3 – Public Property Directory loaded with 320+ dummy properties');
+    console.log('Delta Properties loaded with images and Google Maps!');
 </script>
 </body>
 </html>
