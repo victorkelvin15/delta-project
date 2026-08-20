@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Delta Property Registry – Registration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        :root {
+            --primary: #1a3a5c;
+            --primary-light: #2a5a8c;
+            --secondary: #e8a838;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            --shadow-xl: 0 20px 50px rgba(0,0,0,0.15);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.2s ease;
+        }
+        .portal-container {
+            width: 100%;
+            max-width: 1100px;
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+        }
+        .portal-header {
+            background: var(--primary);
+            padding: 16px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .header-brand { display: flex; align-items: center; gap: 10px; }
+        .logo-icon {
+            width: 40px; height: 40px;
+            background: var(--secondary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .header-brand h1 { color: #fff; font-size: 18px; font-weight: 700; }
+        .header-brand h1 span { color: var(--secondary); }
+        .header-brand .subtitle { color: rgba(255,255,255,0.6); font-size: 11px; }
+        .header-actions .user-badge {
+            color: #fff; font-size: 11px;
+            background: rgba(255,255,255,0.12);
+            padding: 4px 12px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .portal-tabs {
+            display: flex;
+            background: var(--gray-50);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 0 20px;
+            gap: 1px;
+            overflow-x: auto;
+        }
+        .portal-tab {
+            padding: 10px 14px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--gray-500);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            background: none;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            font-family: inherit;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+        .portal-tab.active { color: var(--primary); border-bottom-color: var(--secondary); background: #fff; }
+        .portal-tab:hover { color: var(--gray-700); background: rgba(0,0,0,0.02); }
+        .portal-content {
+            padding: 20px 28px 18px;
+            max-height: 620px;
+            overflow-y: auto;
+            background: #fff;
+        }
+        .portal-content::-webkit-scrollbar { width: 4px; }
+        .portal-content::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 4px; }
+        .tab-panel { display: none; animation: fadeUp 0.3s ease; }
+        .tab-panel.active { display: block; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .reg-progress-wrapper { padding-bottom: 12px; border-bottom: 1px solid var(--gray-200); margin-bottom: 16px; }
+        .reg-progress-track { width: 100%; height: 4px; background: var(--gray-200); border-radius: 4px; overflow: hidden; }
+        .reg-progress-fill { height: 100%; background: linear-gradient(90deg, var(--secondary), var(--secondary-light)); border-radius: 4px; transition: width 0.5s ease; width: 0%; }
+        .reg-progress-steps { display: flex; justify-content: space-between; margin-top: 6px; }
+        .reg-step { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+        .step-dot {
+            width: 20px; height: 20px; border-radius: 50%;
+            background: var(--gray-200); border: 2px solid var(--gray-300);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 8px; font-weight: 700; color: var(--gray-500);
+            transition: var(--transition);
+        }
+        .reg-step.active .step-dot { background: var(--secondary); border-color: var(--secondary); color: var(--primary); box-shadow: 0 0 0 3px rgba(232,168,56,0.2); }
+        .reg-step.completed .step-dot { background: var(--success); border-color: var(--success); color: #fff; }
+        .step-label { font-size: 6px; font-weight: 500; color: var(--gray-400); text-transform: uppercase; text-align: center; max-width: 40px; line-height: 1.1; }
+        .reg-step.active .step-label { color: var(--primary); font-weight: 600; }
+        .step-container { display: none; animation: fadeUp 0.3s ease; }
+        .step-container.active { display: block; }
+        .step-title { font-size: 18px; font-weight: 700; color: var(--gray-900); margin-bottom: 2px; display: flex; align-items: center; gap: 8px; }
+        .step-description { color: var(--gray-500); font-size: 12px; margin-bottom: 14px; }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px; }
+        .form-grid .full-width { grid-column: 1 / -1; }
+        .form-group { display: flex; flex-direction: column; gap: 3px; }
+        .form-group label { font-size: 11px; font-weight: 600; color: var(--gray-700); display: flex; align-items: center; gap: 4px; }
+        .form-group label .required { color: var(--danger); }
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 8px 10px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm);
+            font-size: 12px; font-family: inherit; background: var(--gray-50);
+            transition: var(--transition); width: 100%;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none; border-color: var(--secondary); background: #fff;
+            box-shadow: 0 0 0 3px rgba(232,168,56,0.1);
+        }
+        .form-group textarea { min-height: 50px; resize: vertical; }
+        .form-group .helper-text { font-size: 9px; color: var(--gray-400); margin-top: 1px; }
+        .form-group .error-message { font-size: 10px; color: var(--danger); margin-top: 1px; display: none; }
+        .form-group .error-message.visible { display: block; }
+        .form-group input.error, .form-group select.error { border-color: var(--danger); background: #fef2f2; }
+
+        .image-upload-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); gap: 10px; margin: 6px 0; }
+        .image-upload-box {
+            border: 2px dashed var(--gray-300); border-radius: var(--radius-sm);
+            padding: 12px 6px; text-align: center; cursor: pointer;
+            background: var(--gray-50); transition: var(--transition);
+            position: relative;
+        }
+        .image-upload-box:hover { border-color: var(--secondary); background: #fefaf0; }
+        .image-upload-box .upload-icon { font-size: 24px; color: var(--gray-400); }
+        .image-upload-box .upload-label { font-size: 9px; color: var(--gray-500); margin-top: 2px; }
+        .image-upload-box input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+        .image-upload-box .file-preview { font-size: 10px; color: var(--success); margin-top: 4px; word-break: break-all; }
+
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+            padding: 8px 16px; border: none; border-radius: var(--radius-sm);
+            font-size: 12px; font-weight: 600; font-family: inherit;
+            cursor: pointer; transition: var(--transition);
+        }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { background: var(--primary-light); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26,58,92,0.2); }
+        .btn-secondary { background: var(--gray-200); color: var(--gray-700); }
+        .btn-secondary:hover { background: var(--gray-300); }
+        .btn-success { background: var(--success); color: #fff; }
+        .btn-success:hover { background: #27ae60; transform: translateY(-1px); }
+        .btn-outline { background: transparent; color: var(--gray-600); border: 1.5px solid var(--gray-300); }
+        .btn-outline:hover { background: var(--gray-100); border-color: var(--gray-400); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+        .btn .spinner { display: none; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+        .btn.loading .spinner { display: inline-block; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .portal-footer {
+            padding: 10px 28px 14px;
+            border-top: 1px solid var(--gray-200);
+            background: var(--gray-50);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            font-size: 10px;
+            color: var(--gray-400);
+        }
+
+        .review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; }
+        .review-item { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--gray-100); font-size: 12px; }
+        .review-item .label { color: var(--gray-500); font-weight: 500; }
+        .review-item .value { color: var(--gray-800); font-weight: 500; text-align: right; max-width: 60%; }
+
+        .confirmation-box { text-align: center; padding: 20px 10px; }
+        .confirmation-box .big-icon { font-size: 48px; display: block; margin-bottom: 8px; }
+        .confirmation-box h3 { font-size: 20px; font-weight: 700; color: var(--gray-900); }
+        .confirmation-box .ref-code { background: var(--gray-100); padding: 8px 20px; border-radius: var(--radius-sm); font-size: 22px; font-weight: 700; letter-spacing: 2px; color: var(--primary); display: inline-block; margin: 8px 0; font-family: monospace; }
+
+        .toast {
+            position: fixed; bottom: 30px; right: 30px;
+            padding: 10px 18px; border-radius: var(--radius-sm);
+            background: var(--gray-900); color: #fff;
+            font-size: 12px; font-weight: 500;
+            box-shadow: var(--shadow-xl);
+            transform: translateY(120px); opacity: 0;
+            transition: var(--transition);
+            z-index: 1000;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--danger); }
+        .toast.info { background: var(--info); }
+
+        @media (max-width: 700px) {
+            .portal-content { padding: 12px 14px; max-height: 480px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .review-grid { grid-template-columns: 1fr; }
+            .image-upload-grid { grid-template-columns: 1fr 1fr; }
+            .portal-header { flex-direction: column; align-items: flex-start; }
+        }
+        @media (max-width: 480px) {
+            .portal-tab { padding: 6px 8px; font-size: 9px; }
+            .step-label { font-size: 5px; max-width: 28px; }
+            .step-dot { width: 16px; height: 16px; font-size: 6px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<div class="portal-container">
+
+    <div class="portal-header">
+        <div class="header-brand">
+            <div class="logo-icon">Δ</div>
+            <div>
+                <h1>Delta <span>Registry</span></h1>
+                <div class="subtitle">Property Registration</div>
+            </div>
+        </div>
+        <div class="header-actions">
+            <span class="user-badge"><i class="fas fa-user-circle"></i> Owner</span>
+        </div>
+    </div>
+
+    <div class="portal-tabs" id="portalTabs">
+        <button class="portal-tab active" data-tab="register"><i class="fas fa-home"></i> Register Property</button>
+        <button class="portal-tab" data-tab="myproperties"><i class="fas fa-list"></i> My Properties</button>
+    </div>
+
+    <div class="portal-content">
+
+        <!-- ========== REGISTER TAB ========== -->
+        <div class="tab-panel active" data-tab="register">
+
+            <!-- progress -->
+            <div class="reg-progress-wrapper">
+                <div class="reg-progress-track"><div class="reg-progress-fill" id="regProgressFill" style="width: 12.5%;"></div></div>
+                <div class="reg-progress-steps" id="regProgressSteps">
+                    <div class="reg-step active" data-step="1"><div class="step-dot">1</div><span class="step-label">Owner</span></div>
+                    <div class="reg-step" data-step="2"><div class="step-dot">2</div><span class="step-label">Property</span></div>
+                    <div class="reg-step" data-step="3"><div class="step-dot">3</div><span class="step-label">Location</span></div>
+                    <div class="reg-step" data-step="4"><div class="step-dot">4</div><span class="step-label">Images</span></div>
+                    <div class="reg-step" data-step="5"><div class="step-dot">5</div><span class="step-label">Docs</span></div>
+                    <div class="reg-step" data-step="6"><div class="step-dot">6</div><span class="step-label">Review</span></div>
+                    <div class="reg-step" data-step="7"><div class="step-dot">7</div><span class="step-label">Confirm</span></div>
+                </div>
+            </div>
+
+            <!-- STEP 1: OWNER INFO -->
+            <div class="step-container active" data-step="1">
+                <div class="step-title"><span class="step-icon">👤</span> Owner Information</div>
+                <p class="step-description">Provide personal details of the property owner.</p>
+                <div class="form-grid">
+                    <div class="form-group full-width"><label>Full Name <span class="required">*</span></label><input type="text" id="ownerName" placeholder="e.g. Chidi Okonkwo" /><div class="error-message" id="ownerNameError">Required</div></div>
+                    <div class="form-group"><label>Phone <span class="required">*</span></label><input type="tel" id="ownerPhone" placeholder="08012345678" /><div class="error-message" id="ownerPhoneError">Required</div></div>
+                    <div class="form-group"><label>Email <span class="required">*</span></label><input type="email" id="ownerEmail" placeholder="owner@example.com" /><div class="error-message" id="ownerEmailError">Valid email required</div></div>
+                    <div class="form-group"><label>ID Type <span class="required">*</span></label>
+                        <select id="ownerIdType"><option value="">Select</option><option value="NIN">NIN</option><option value="Passport">International Passport</option><option value="Drivers">Driver's Licence</option><option value="Voters">Voter's Card</option></select>
+                        <div class="error-message" id="ownerIdTypeError">Required</div>
+                    </div>
+                    <div class="form-group"><label>ID Number <span class="required">*</span></label><input type="text" id="ownerIdNumber" placeholder="1234567890" /><div class="error-message" id="ownerIdNumberError">Required</div></div>
+                    <div class="form-group full-width"><label>Contact Address <span class="required">*</span></label><input type="text" id="ownerAddress" placeholder="45 Peace Avenue, Asaba" /><div class="error-message" id="ownerAddressError">Required</div></div>
+                </div>
+            </div>
+
+            <!-- STEP 2: PROPERTY INFO -->
+            <div class="step-container" data-step="2">
+                <div class="step-title"><span class="step-icon">🏠</span> Property Information</div>
+                <p class="step-description">Details about the property.</p>
+                <div class="form-grid">
+                    <div class="form-group full-width"><label>Property Title <span class="required">*</span></label><input type="text" id="propTitle" placeholder="e.g. 3-Bedroom Luxury Flat" /><div class="error-message" id="propTitleError">Required</div></div>
+                    <div class="form-group"><label>Property Type <span class="required">*</span></label>
+                        <select id="propType"><option value="">Select</option><option value="Residential">Residential</option><option value="Commercial">Commercial</option><option value="Industrial">Industrial</option><option value="Land">Land</option></select>
+                        <div class="error-message" id="propTypeError">Required</div>
+                    </div>
+                    <div class="form-group"><label>Purpose <span class="required">*</span></label>
+                        <select id="propPurpose"><option value="">Select</option><option value="Residential">Residential</option><option value="Commercial">Commercial</option><option value="Other">Other</option></select>
+                        <div class="error-message" id="propPurposeError">Required</div>
+                    </div>
+                    <div class="form-group"><label>Bedrooms</label><input type="number" id="propBedrooms" placeholder="3" min="0" /></div>
+                    <div class="form-group"><label>Bathrooms</label><input type="number" id="propBathrooms" placeholder="2" min="0" /></div>
+                    <div class="form-group"><label>Floors</label><input type="number" id="propFloors" placeholder="2" min="1" /></div>
+                    <div class="form-group full-width"><label>Description</label><textarea id="propDescription" rows="2" placeholder="Brief description of the property..."></textarea></div>
+                    <div class="form-group"><label>Year Built</label><input type="number" id="propYear" placeholder="2020" min="1900" max="2026" /></div>
+                    <div class="form-group"><label>Current Condition</label>
+                        <select id="propCondition"><option value="Excellent">Excellent</option><option value="Good">Good</option><option value="Fair">Fair</option><option value="Needs Renovation">Needs Renovation</option></select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: LOCATION -->
+            <div class="step-container" data-step="3">
+                <div class="step-title"><span class="step-icon">📍</span> Complete Property Location</div>
+                <p class="step-description">Full address and GPS coordinates.</p>
+                <div class="form-grid">
+                    <div class="form-group"><label>State <span class="required">*</span></label><input type="text" id="locState" placeholder="Delta" /><div class="error-message" id="locStateError">Required</div></div>
+                    <div class="form-group"><label>LGA <span class="required">*</span></label><input type="text" id="locLga" placeholder="Oshimili" /><div class="error-message" id="locLgaError">Required</div></div>
+                    <div class="form-group"><label>City/Town <span class="required">*</span></label><input type="text" id="locCity" placeholder="Asaba" /><div class="error-message" id="locCityError">Required</div></div>
+                    <div class="form-group"><label>Area/District</label><input type="text" id="locArea" placeholder="GRA" /></div>
+                    <div class="form-group"><label>Street Name <span class="required">*</span></label><input type="text" id="locStreet" placeholder="Oba Road" /><div class="error-message" id="locStreetError">Required</div></div>
+                    <div class="form-group"><label>House Number</label><input type="text" id="locHouse" placeholder="12" /></div>
+                    <div class="form-group full-width"><label>Landmark</label><input type="text" id="locLandmark" placeholder="Near Central Mosque" /></div>
+                    <div class="form-group full-width"><label>Full Address <span class="required">*</span></label><input type="text" id="locFullAddress" placeholder="12 Oba Road, GRA, Asaba, Delta" /><div class="error-message" id="locFullAddressError">Required</div></div>
+                    <div class="form-group"><label>GPS Latitude</label><input type="text" id="locLat" placeholder="6.2024" /></div>
+                    <div class="form-group"><label>GPS Longitude</label><input type="text" id="locLng" placeholder="6.6904" /></div>
+                    <div class="form-group full-width"><label>Interactive Map Pin (paste link)</label><input type="text" id="locMapPin" placeholder="https://maps.google.com/..." /></div>
+                </div>
+            </div>
+
+            <!-- STEP 4: IMAGES -->
+            <div class="step-container" data-step="4">
+                <div class="step-title"><span class="step-icon">🖼️</span> Property Images</div>
+                <p class="step-description">Upload images of the property and environment.</p>
+
+                <div style="font-size:12px;font-weight:600;color:var(--gray-700);margin:6px 0 4px;">🏠 House</div>
+                <div class="image-upload-grid" id="houseImageGrid">
+                    <div class="image-upload-box"><span class="upload-icon">🏠</span><div class="upload-label">Front</div><input type="file" accept="image/*" /><div class="file-preview"></div></div>
+                    <div class="image-upload-box"><span class="upload-icon">🏠</span><div class="upload-label">Back</div><input type="file" accept="image/*" /><div class="file-preview"></div></div>
+                    <div class="image-upload-box"><span class="upload-icon">🏠</span><div class="upload-label">Left Side</div><input type="file" accept="image/*" /><div class="file-preview"></div></div>
+                    <div class="image-upload-box"><span class="upload-icon">🏠</span><div class="upload-label">Right Side</div><input type="file" accept="image/*" /><div class="file-preview"></div></div>
+                    <div class="image-upload-box"><span class="upload-icon">🏠</span><div class="upload-label">Interior</div><input type="file" accept="image/*" /><div class="file-preview"></div></div>
+                    <div class="image-upload-box"><span class="upload-icon">🏠</span><div class="upload-label">Compound</div><input type="file" accept="image/*" /><div class="file-preview"></div></div>
+                    <div class="image-upload-box"><span class="upload-icon">🚗</span><div class="upload-label">Parking</div><input type="file" accept="image/*" /><div class="file-preview"></div></div>
+                </div>
+
+                <div style="font-size:12px;font-weight:600;color:var(--gray-700);margin:10px 0 4px;">🌍 Environment</div>
+                <div class="image-upload-grid" id="envImageGrid">
+                    <div class="image-upload-box"><span class="upload-icon">🛤️</span><div class="upload-label">Street</div><input type="file" accept="image/*" /><div class="file-preview"></div></div>
+                    <div class="image-upload-box"><span class="upload-icon">🛣️</span><div class="upload-label">Road</div><input type="file" accept="image/*" /><div class="file-preview"></div></div>
+                    <div class="image-upload-box"><span class="upload-icon">🏘️</span><div class="upload-label">Neighbourhood</div><input type="file" accept="image/*" /><div class="file-preview"></div></div>
+                    <div class="image-upload-box"><span class="upload-icon">🗺️</span><div class="upload-label">Nearby Landmarks</div><input type="file" accept="image/*" /><div class="file-preview"></div></div>
+                    <div class="image-upload-box"><span class="upload-icon">🌳</span><div class="upload-label">General Environment</div><input type="file" accept="image/*" /><div class="file-preview"></div></div>
+                </div>
+                <div class="helper-text" style="margin-top:6px;">Multiple image uploads allowed. Click each box to upload.</div>
+            </div>
+
+            <!-- STEP 5: DOCUMENTS -->
+            <div class="step-container" data-step="5">
+                <div class="step-title"><span class="step-icon">📄</span> Property Documents</div>
+                <p class="step-description">Upload supporting documents (optional at submission).</p>
+                <div class="form-grid">
+                    <div class="form-group full-width"><label>Survey Plan</label><input type="file" id="docSurvey" accept=".pdf,.jpg,.jpeg,.png" /></div>
+                    <div class="form-group full-width"><label>C of O</label><input type="file" id="docCofO" accept=".pdf,.jpg,.jpeg,.png" /></div>
+                    <div class="form-group full-width"><label>Deed of Assignment</label><input type="file" id="docDeed" accept=".pdf,.jpg,.jpeg,.png" /></div>
+                    <div class="form-group full-width"><label>Allocation Documents</label><input type="file" id="docAllocation" accept=".pdf,.jpg,.jpeg,.png" /></div>
+                    <div class="form-group full-width"><label>Other Supporting Documents</label><input type="file" id="docOther" accept=".pdf,.jpg,.jpeg,.png" multiple /></div>
+                </div>
+                <div class="helper-text">Documents are optional. You can provide them later.</div>
+            </div>
+
+            <!-- STEP 6: REVIEW -->
+            <div class="step-container" data-step="6">
+                <div class="step-title"><span class="step-icon">📋</span> Review Application</div>
+                <p class="step-description">Please review all the information before submission.</p>
+                <div id="reviewContainer" class="review-grid"></div>
+                <div style="margin-top:14px;display:flex;gap:6px;flex-wrap:wrap;">
+                    <button class="btn btn-success" id="submitPropertyBtn"><i class="fas fa-check"></i> SUBMIT PROPERTY</button>
+                    <button class="btn btn-outline" id="reviewBackBtn"><i class="fas fa-arrow-left"></i> Go Back</button>
+                </div>
+            </div>
+
+            <!-- STEP 7: CONFIRMATION -->
+            <div class="step-container" data-step="7">
+                <div class="confirmation-box">
+                    <span class="big-icon">✅</span>
+                    <h3>Property Registration Submitted Successfully</h3>
+                    <div class="ref-code" id="confirmationRef">DP-2026-000001</div>
+                    <p style="color:var(--gray-600);font-size:13px;max-width:400px;margin:6px auto;">
+                        Your property has been submitted to Delta Properties and is awaiting administrative verification.
+                    </p>
+                    <div style="margin-top:12px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;">
+                        <span style="background:var(--warning);color:#fff;padding:4px 14px;border-radius:50px;font-size:11px;font-weight:600;">🟡 PENDING VERIFICATION</span>
+                    </div>
+                    <button class="btn btn-primary" style="margin-top:16px;" onclick="switchTab('myproperties')"><i class="fas fa-list"></i> View My Properties</button>
+                </div>
+            </div>
+
+            <!-- footer navigation -->
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:10px;border-top:1px solid var(--gray-200);flex-wrap:wrap;gap:6px;">
+                <div><span style="font-size:10px;color:var(--gray-500);">Step <span id="regStepNum">1</span> of 7</span><span style="color:var(--gray-300);margin:0 4px;">|</span><span style="font-size:10px;color:var(--gray-400);" id="regStepName">Owner Info</span></div>
+                <div style="display:flex;gap:4px;flex-wrap:wrap;">
+                    <button class="btn btn-outline" id="regPrevBtn" disabled><i class="fas fa-chevron-left"></i> Back</button>
+                    <button class="btn btn-primary" id="regNextBtn">Next <i class="fas fa-chevron-right"></i></button>
+                    <button class="btn btn-success" id="regSubmitBtn" style="display:none;"><i class="fas fa-check"></i> Register</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== MY PROPERTIES TAB ========== -->
+        <div class="tab-panel" data-tab="myproperties">
+            <div style="font-size:18px;font-weight:700;color:var(--gray-900);margin-bottom:12px;">My Properties</div>
+            <div id="myPropertiesList" style="display:grid;gap:10px;"></div>
+            <button class="btn btn-primary" style="margin-top:12px;" onclick="switchTab('register')"><i class="fas fa-plus"></i> Register New Property</button>
+        </div>
+
+    </div>
+
+    <div class="portal-footer">
+        <span><i class="fas fa-shield-alt"></i> Secure • Delta Property Registry</span>
+        <span>© 2026 Delta State</span>
+    </div>
+</div>
+
+<!-- Firebase SDK (compat build so classic scripts + inline handlers keep working) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script>
+    // ========================================
+    // STATE
+    // ========================================
+    const state = {
+        step: 1,
+        totalSteps: 7,
+        refNumber: null,
+        submitted: false,
+    };
+
+    const stepNames = {
+        1: 'Owner Info',
+        2: 'Property Info',
+        3: 'Location',
+        4: 'Images',
+        5: 'Documents',
+        6: 'Review',
+        7: 'Confirmation'
+    };
+
+    // ========================================
+    // DOM REFS
+    // ========================================
+    const $ = id => document.getElementById(id);
+    const toast = $('toast');
+
+    function showToast(msg, type='info') {
+        toast.textContent = msg;
+        toast.className = 'toast ' + type;
+        toast.classList.add('show');
+        clearTimeout(toast._t);
+        toast._t = setTimeout(() => toast.classList.remove('show'), 4000);
+    }
+
+    // ========================================
+    // TAB SWITCHING
+    // ========================================
+    function switchTab(tab) {
+        document.querySelectorAll('.portal-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.dataset.tab === tab));
+        if (tab === 'myproperties') loadMyProperties();
+    }
+    document.querySelectorAll('.portal-tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+
+    // ========================================
+    // REGISTRATION UI
+    // ========================================
+    function updateRegUI() {
+        const s = state.step;
+        document.querySelectorAll('.reg-step').forEach(el => {
+            const step = parseInt(el.dataset.step);
+            el.classList.toggle('active', step === s);
+            el.classList.toggle('completed', step < s);
+        });
+        const progress = ((s - 1) / (state.totalSteps - 1)) * 100;
+        $('regProgressFill').style.width = progress + '%';
+        document.querySelectorAll('.step-container').forEach(el => {
+            el.classList.toggle('active', parseInt(el.dataset.step) === s);
+        });
+        $('regStepNum').textContent = s;
+        $('regStepName').textContent = stepNames[s] || '';
+        $('regPrevBtn').disabled = s === 1;
+        if (s === state.totalSteps) {
+            $('regNextBtn').style.display = 'none';
+            $('regSubmitBtn').style.display = 'none';
+        } else if (s === 6) {
+            $('regNextBtn').style.display = 'none';
+            $('regSubmitBtn').style.display = 'inline-flex';
+            buildReview();
+        } else {
+            $('regNextBtn').style.display = 'inline-flex';
+            $('regSubmitBtn').style.display = 'none';
+        }
+        if (s === 7) {
+            if (!state.refNumber) {
+                const now = new Date();
+                const year = now.getFullYear();
+                const seq = String(Math.floor(Math.random() * 999999)).padStart(6, '0');
+                state.refNumber = `DP-${year}-${seq}`;
+                $('confirmationRef').textContent = state.refNumber;
+            }
+        }
+    }
+
+    // ========================================
+    // NAVIGATION
+    // ========================================
+    function nextStep() {
+        if (state.step === state.totalSteps) return;
+        if (!validateStep()) return;
+        if (state.step === 6) { handleSubmit(); return; }
+        state.step++;
+        updateRegUI();
+    }
+
+    function prevStep() {
+        if (state.step > 1) { state.step--; updateRegUI(); }
+    }
+
+    $('regNextBtn').addEventListener('click', nextStep);
+    $('regPrevBtn').addEventListener('click', prevStep);
+    $('regSubmitBtn').addEventListener('click', handleSubmit);
+    $('reviewBackBtn').addEventListener('click', () => { state.step = 5; updateRegUI(); });
+
+    // ========================================
+    // VALIDATION
+    // ========================================
+    function validateStep() {
+        let valid = true;
+        const step = state.step;
+        document.querySelectorAll('.error-message').forEach(el => el.classList.remove('visible'));
+        document.querySelectorAll('.form-group input, .form-group select').forEach(el => el.classList.remove('error'));
+
+        function showError(id, errId) {
+            const el = $(id);
+            const err = $(errId);
+            if (el) el.classList.add('error');
+            if (err) err.classList.add('visible');
+            valid = false;
+        }
+
+        switch(step) {
+            case 1:
+                ['ownerName','ownerPhone','ownerEmail','ownerIdType','ownerIdNumber','ownerAddress'].forEach(id => {
+                    const el = $(id);
+                    if (!el || !el.value.trim()) showError(id, id + 'Error');
+                });
+                const email = $('ownerEmail');
+                if (email && email.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) showError('ownerEmail', 'ownerEmailError');
+                break;
+            case 2:
+                ['propTitle','propType','propPurpose'].forEach(id => {
+                    const el = $(id);
+                    if (!el || !el.value.trim()) showError(id, id + 'Error');
+                });
+                break;
+            case 3:
+                ['locState','locLga','locCity','locStreet','locFullAddress'].forEach(id => {
+                    const el = $(id);
+                    if (!el || !el.value.trim()) showError(id, id + 'Error');
+                });
+                break;
+            case 4: // images optional
+            case 5: // docs optional
+                break;
+            default: break;
+        }
+        if (!valid) showToast('Please fill in all required fields', 'error');
+        return valid;
+    }
+
+    // ========================================
+    // BUILD REVIEW
+    // ========================================
+    function buildReview() {
+        const container = $('reviewContainer');
+        const fields = [
+            { label: 'Owner Full Name', id: 'ownerName' },
+            { label: 'Phone', id: 'ownerPhone' },
+            { label: 'Email', id: 'ownerEmail' },
+            { label: 'ID Type', id: 'ownerIdType' },
+            { label: 'ID Number', id: 'ownerIdNumber' },
+            { label: 'Contact Address', id: 'ownerAddress' },
+            { label: 'Property Title', id: 'propTitle' },
+            { label: 'Property Type', id: 'propType' },
+            { label: 'Purpose', id: 'propPurpose' },
+            { label: 'Bedrooms', id: 'propBedrooms' },
+            { label: 'Bathrooms', id: 'propBathrooms' },
+            { label: 'Floors', id: 'propFloors' },
+            { label: 'Year Built', id: 'propYear' },
+            { label: 'Condition', id: 'propCondition' },
+            { label: 'State', id: 'locState' },
+            { label: 'LGA', id: 'locLga' },
+            { label: 'City', id: 'locCity' },
+            { label: 'Area', id: 'locArea' },
+            { label: 'Street', id: 'locStreet' },
+            { label: 'House No.', id: 'locHouse' },
+            { label: 'Landmark', id: 'locLandmark' },
+            { label: 'Full Address', id: 'locFullAddress' },
+            { label: 'GPS Lat', id: 'locLat' },
+            { label: 'GPS Lng', id: 'locLng' },
+        ];
+        let html = '';
+        fields.forEach(f => {
+            const el = $(f.id);
+            const val = el ? el.value || '—' : '—';
+            html += `<div class="review-item"><span class="label">${f.label}</span><span class="value">${val}</span></div>`;
+        });
+        // image counts
+        const houseFiles = document.querySelectorAll('#houseImageGrid input[type="file"]');
+        const envFiles = document.querySelectorAll('#envImageGrid input[type="file"]');
+        let houseCount = 0, envCount = 0;
+        houseFiles.forEach(inp => { if (inp.files && inp.files.length > 0) houseCount++; });
+        envFiles.forEach(inp => { if (inp.files && inp.files.length > 0) envCount++; });
+        html += `<div class="review-item"><span class="label">House Images</span><span class="value">${houseCount} uploaded</span></div>`;
+        html += `<div class="review-item"><span class="label">Environment Images</span><span class="value">${envCount} uploaded</span></div>`;
+        // docs
+        const docIds = ['docSurvey','docCofO','docDeed','docAllocation','docOther'];
+        let docCount = 0;
+        docIds.forEach(id => { const el = $(id); if (el && el.files && el.files.length > 0) docCount++; });
+        html += `<div class="review-item"><span class="label">Documents</span><span class="value">${docCount} files</span></div>`;
+        container.innerHTML = html;
+    }
+
+    // ========================================
+    // FIRESTORE SAVE FUNCTION
+    // ========================================
+    async function savePropertyToFirestore(propertyData) {
+        try {
+            await DeltaDB.addProperty(propertyData);
+            // Remember this owner's email locally so "My Properties" can look up
+            // their submissions across visits (no login on the owner portal).
+            if (propertyData.email) {
+                localStorage.setItem('deltaOwnerEmail', propertyData.email);
+            }
+            return true;
+        } catch(e) {
+            console.error('Error saving to Firestore:', e);
+            return false;
+        }
+    }
+
+    // ========================================
+    // LOAD MY PROPERTIES
+    // ========================================
+    async function loadMyProperties() {
+        const container = $('myPropertiesList');
+        const ownerEmail = localStorage.getItem('deltaOwnerEmail');
+        container.innerHTML = `<div style="padding:20px;text-align:center;color:var(--gray-400);">Loading your properties…</div>`;
+        if (!ownerEmail) {
+            container.innerHTML = `<div style="padding:20px;text-align:center;color:var(--gray-400);">You haven't registered any properties yet.</div>`;
+            return;
+        }
+        try {
+            const stored = await DeltaDB.getPropertiesByEmail(ownerEmail);
+            if (stored.length === 0) {
+                container.innerHTML = `<div style="padding:20px;text-align:center;color:var(--gray-400);">You haven't registered any properties yet.</div>`;
+                return;
+            }
+            container.innerHTML = stored.map(p => `
+                <div style="padding:16px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--gray-50);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;">
+                    <div>
+                        <div style="font-weight:600;">${p.title}</div>
+                        <div style="font-size:12px;color:var(--gray-500);">${p.city}, ${p.lga} • Ref: ${p.id}</div>
+                    </div>
+                    <span style="background:${p.published ? 'var(--success)' : p.status === 'VERIFIED' ? 'var(--success)' : 'var(--warning)'};color:#fff;padding:2px 12px;border-radius:50px;font-size:10px;font-weight:600;">
+                        ${p.published ? '✅ PUBLISHED' : p.status === 'VERIFIED' ? '✅ VERIFIED' : '🟡 PENDING'}
+                    </span>
+                </div>
+            `).join('');
+        } catch(e) {
+            container.innerHTML = `<div style="padding:20px;text-align:center;color:var(--gray-400);">Error loading properties.</div>`;
+        }
+    }
+
+    // ========================================
+    // SUBMIT - SAVES TO LOCALSTORAGE
+    // ========================================
+    async function handleSubmit() {
+        if (state.submitted) return;
+        if (!validateStep()) return;
+
+        if (!DeltaDB.isReady()) {
+            showToast('⚠️ Firebase is not configured yet. Add your credentials in js/firebase-config.js', 'error');
+            return;
+        }
+
+        // Collect all form data
+        const propertyData = {
+            id: 'DP-2026-' + String(Date.now()).slice(-6),
+            title: $('propTitle').value,
+            type: $('propType').value,
+            purpose: $('propPurpose').value,
+            bedrooms: parseInt($('propBedrooms').value) || 0,
+            bathrooms: parseInt($('propBathrooms').value) || 0,
+            floors: parseInt($('propFloors').value) || 1,
+            description: $('propDescription').value || '',
+            yearBuilt: $('propYear').value || '',
+            condition: $('propCondition').value || 'Good',
+            owner: $('ownerName').value,
+            phone: $('ownerPhone').value,
+            email: $('ownerEmail').value,
+            idType: $('ownerIdType').value,
+            idNumber: $('ownerIdNumber').value,
+            address: $('ownerAddress').value,
+            state: $('locState').value || 'Delta',
+            lga: $('locLga').value,
+            city: $('locCity').value,
+            area: $('locArea').value || '',
+            street: $('locStreet').value,
+            house: $('locHouse').value || '',
+            landmark: $('locLandmark').value || '',
+            fullAddress: $('locFullAddress').value,
+            lat: parseFloat($('locLat').value) || (5.3 + Math.random() * 1.5),
+            lng: parseFloat($('locLng').value) || (5.4 + Math.random() * 1.5),
+            mapPin: $('locMapPin').value || '',
+            status: 'PENDING',
+            verified: false,
+            published: false,
+            submitted: new Date().toISOString(),
+            image: 'https://images.unsplash.com/photo-1564013799919-ab600027d660?w=400&h=300&fit=crop'
+        };
+
+        // Add aliases so the admin & public pages can read fields consistently
+        propertyData.ownerName = propertyData.owner;
+        propertyData.propTitle = propertyData.title;
+        propertyData.propPurpose = propertyData.purpose;
+        propertyData.locFullAddress = propertyData.fullAddress;
+        propertyData.town = propertyData.city;
+        propertyData.images = 0;
+        propertyData.docs = 0;
+
+        // Save to Firestore
+        showToast('Saving your property…', 'info');
+        const saved = await savePropertyToFirestore(propertyData);
+
+        if (saved) {
+            state.submitted = true;
+            state.step = 7;
+            // Show the SAME reference used as the Firestore document ID.
+            state.refNumber = propertyData.id;
+            $('confirmationRef').textContent = state.refNumber;
+            updateRegUI();
+            showToast('✅ Property registered successfully! Waiting for admin verification.', 'success');
+        } else {
+            showToast('❌ Error saving property. Please try again.', 'error');
+        }
+    }
+
+    // ========================================
+    // IMAGE PREVIEW
+    // ========================================
+    document.querySelectorAll('.image-upload-box input[type="file"]').forEach(inp => {
+        inp.addEventListener('change', function() {
+            const preview = this.parentElement.querySelector('.file-preview');
+            if (this.files && this.files.length > 0) {
+                const names = Array.from(this.files).map(f => f.name).join(', ');
+                preview.textContent = names.length > 20 ? names.substring(0,20)+'…' : names;
+                preview.style.color = 'var(--success)';
+            } else {
+                preview.textContent = '';
+            }
+        });
+    });
+
+    // ========================================
+    // INIT
+    // ========================================
+    updateRegUI();
+    loadMyProperties();
+    showToast('Welcome to Delta Property Registration', 'info');
+    console.log('Delta Property Registry – Module 1 ready with Firebase Firestore support');
+</script>
+</body>
+</html>

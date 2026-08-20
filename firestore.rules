@@ -1,0 +1,61 @@
+rules_version = '2';
+
+// =============================================================================
+// Delta Properties Registry — Firestore Security Rules
+// =============================================================================
+//
+// Security model for this project (no end-user auth on the public/registry
+// pages; the admin portal is intended to be protected by Firebase Auth):
+//
+//   properties collection
+//     * READ   : anyone may read documents that are PUBLISHED (public site).
+//                Admins (authenticated) may read every document.
+//     * CREATE : anyone may submit a new registration, but only as a fresh
+//                PENDING record (they cannot self-verify or self-publish).
+//     * UPDATE / DELETE : admins only (moves through VERIFY -> PUBLISH flow).
+//
+//   history collection (audit trail)
+//     * READ / WRITE : admins only.
+//
+// NOTE ON ADMINS:
+//   These rules treat any signed-in Firebase Auth user as an "admin". Wire the
+//   admin.html portal to Firebase Auth (email/password) so only your staff can
+//   sign in. For finer control, switch `isAdmin()` to check a custom claim,
+//   e.g.  return request.auth != null && request.auth.token.admin == true;
+// =============================================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      // Treat any authenticated user as an admin. Tighten with custom claims
+      // (request.auth.token.admin == true) once you provision admin accounts.
+      return request.auth != null;
+    }
+
+    // Validate a brand-new public submission: must start life as PENDING and
+    // must NOT arrive pre-verified or pre-published.
+    function isValidNewSubmission() {
+      return request.resource.data.status == 'PENDING'
+        && request.resource.data.verified == false
+        && request.resource.data.published == false
+        && request.resource.data.keys().hasAll(['id', 'ownerName', 'email', 'title']);
+    }
+
+    match /properties/{propertyId} {
+      // Public read only for published properties; admins read everything.
+      allow read: if resource.data.published == true || isAdmin();
+
+      // Anyone may create a PENDING submission; admins may create anything.
+      allow create: if isValidNewSubmission() || isAdmin();
+
+      // Only admins may change status (verify/publish/reject) or delete.
+      allow update, delete: if isAdmin();
+    }
+
+    match /history/{entryId} {
+      // Audit trail is admin-only.
+      allow read, write: if isAdmin();
+    }
+  }
+}
