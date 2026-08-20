@@ -1,0 +1,15 @@
+# Delta Properties — Netlify redirect rules
+# Case-safety: old ADMIN.html link → lowercase admin.html
+/ADMIN.html            /admin.html         302
+/ADMIN.HTM             /admin.html         302
+/registry.html         /registration.html  302
+
+# Friendly URLs
+/portal    /index.html        302
+/register  /registration.html 302
+/login     /login.html        302
+/directory /dashboard.html    302
+/admin     /admin.html        302
+
+# SPA-style fallback: unknown path stays on the portal
+/*       /index.html         404
