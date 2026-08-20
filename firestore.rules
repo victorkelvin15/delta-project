@@ -43,19 +43,29 @@ service cloud.firestore {
     }
 
     match /properties/{propertyId} {
-      // Public read only for published properties; admins read everything.
-      allow read: if resource.data.published == true || isAdmin();
+      // TODO(PROD): TEMPORARY — reads are open to everyone so the (currently
+      // unauthenticated) admin portal can load ALL properties, including
+      // PENDING ones. Before going to production, restore admin-gated reads:
+      //   allow read: if resource.data.published == true || isAdmin();
+      // and protect admin.html with Firebase Auth (see isAdmin() above).
+      allow read: if true;
 
       // Anyone may create a PENDING submission; admins may create anything.
       allow create: if isValidNewSubmission() || isAdmin();
 
-      // Only admins may change status (verify/publish/reject) or delete.
-      allow update, delete: if isAdmin();
+      // TODO(PROD): TEMPORARY — updates/deletes are open so the (currently
+      // unauthenticated) admin portal can verify/publish/reject properties.
+      // Before production, restore admin-only writes and protect admin.html
+      // with Firebase Auth:  allow update, delete: if isAdmin();
+      allow update, delete: if true;
     }
 
     match /history/{entryId} {
-      // Audit trail is admin-only.
-      allow read, write: if isAdmin();
+      // TODO(PROD): TEMPORARY — read AND write are open so the unauthenticated
+      // admin portal can display and append to the audit trail. Restore
+      // admin-only access before production:
+      //   allow read, write: if isAdmin();
+      allow read, write: if true;
     }
   }
 }
